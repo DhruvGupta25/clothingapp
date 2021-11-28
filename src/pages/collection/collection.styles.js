@@ -5,7 +5,7 @@ export const CollectionPageContainer = styled.div`
     flex-direction: column;
 `;
 
-export const TitleContainer = styled.h2`
+export const CollectionTitle = styled.h2`
     font-size: 38px;
     margin: 0 auto 30px;
 `;
