@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route,Navigate  } from 'react-router-dom';
+import { Switch, Route, Redirect  } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import Homepage  from './pages/homepage/homepage.component';
@@ -12,6 +12,7 @@ import './App.css';
 import { auth } from './firebase/firebase.utils';
 import { setCurrentUser } from './redux/user/user.actions'; 
 import { selectCurrentUser } from './redux/user/user.selectors';
+import CollectionPage from './pages/collection/collection.component';
 class App extends React.Component {
   unsubscribeFromAuth = null;
   componentDidMount(){
@@ -38,19 +39,17 @@ class App extends React.Component {
     return (
     <div>
      <Header />
-     <Routes>
-     <Route exact path='/' element={<Homepage />} />
-     <Route path='/shop' element={<ShopPage />} />
-     <Route path='/signin' element={(() => {
-                  if (this.props.currentUser) {
-                    return <Navigate to={`/`} />
-                  } else {
-                    return <SignInAndSignUpPage />
-                  }
-                })()}
-              />
-     <Route exact path='/checkout' element={<CheckoutPage/>} />
-     </Routes>
+     <Switch>
+     <Route exact path='/' component={Homepage} />
+     <Route exact path='/shop' component={ShopPage}  />
+     <Route path='/shop/:collectionId' component={CollectionPage} /> 
+     <Route exact path='/signin' 
+            render={() => this.props.currentUser 
+              ? (<Redirect to= '/' />) 
+              : (<SignInAndSignUpPage/>)}
+      />
+     <Route exact path='/checkout' component={CheckoutPage} />
+     </Switch>
     </div>
   );
 }
